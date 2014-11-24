@@ -46,5 +46,6 @@ public class RijbewijsTest {
         assertTrue(C.ordinal()<CE.ordinal());
         assertTrue(CE.ordinal()<D.ordinal());
         assertTrue(D.ordinal()<DE.ordinal());
+       
     }
 }
