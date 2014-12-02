@@ -2,13 +2,11 @@
  * Datum.java
  */
 package be.vdab.util;
-import be.vdab.util.EnumDatum.*;
 import java.io.Serializable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Collection;
 
 /**
@@ -17,6 +15,10 @@ import java.util.Collection;
  */
 public class Datum implements Serializable, Comparable<Datum>{
     
+    public static final long serialVersionUID = 1l;
+    
+    public enum Maand {JANUARI, FEBRUARI, MAART, APRIL, MEI, JUNI, JULI, AUGUSTUS, SEPTEMER, OKTOBER, NOVEMBER, DECEMBER}
+    
     //constanten voor bepalen van minimum en maximum datum bereik
     private final int MIN_JAARTAL=1583;
     private final int MAX_JAARTAL=4099;
@@ -24,19 +26,27 @@ public class Datum implements Serializable, Comparable<Datum>{
     private final int EERSTE_DAG_IN_MAAND  = 1;
     private final int LAATSTE_DAG_IN_MAAND = 31;
     
-    private final int dag;
-    private final int maand;
-    private final int jaar;
+    private int dag;
+    private int maand;
+    private int jaar;
     
-    private File naamBestand;
-    private FileOutputStream fsDatum;
-    private ObjectOutputStream outputBuffer;
-        
+   public Datum(int dag, int maand, int jaar){
+        try{
+        setDatum(dag,maand,jaar);
+        }
+        catch(DatumException ex){System.err.println(ex.getMessage());}
+    }
+
+    /**
+     * @return the dag
+     */
+    public int getDag() {
+        return dag;
+    }
     
-    public Datum(int dag, int maand, int jaar)throws DatumException{
-        
-        if( (jaar<MIN_JAARTAL || (jaar==MIN_JAARTAL && dag <=EERSTE_DAG_IN_MAAND && maand <= Maand.JANUARI.ordinal())) ||
-            (jaar>MAX_JAARTAL || (jaar==MAX_JAARTAL && dag >=LAATSTE_DAG_IN_MAAND && maand >=Maand.DECEMBER.ordinal()))
+    private final void setDatum(int dag, int maand, int jaar)throws DatumException{
+        if( (jaar<MIN_JAARTAL || (jaar==MIN_JAARTAL && dag <=EERSTE_DAG_IN_MAAND && maand == Datum.Maand.JANUARI.ordinal())) ||
+            (jaar>MAX_JAARTAL || (jaar==MAX_JAARTAL && dag >=LAATSTE_DAG_IN_MAAND && maand ==Datum.Maand.DECEMBER.ordinal()))
           )
           throw new DatumException("Ongeldige invoerdatum : " + String.valueOf(dag) +  DATUM_SEPARATOR + String.valueOf(maand) + DATUM_SEPARATOR + String.valueOf(jaar));
         else
@@ -46,14 +56,7 @@ public class Datum implements Serializable, Comparable<Datum>{
             this.jaar = jaar;
         }
     }
-
-    /**
-     * @return the dag
-     */
-    public int getDag() {
-        return dag;
-    }
-
+    
     /**
      * @return the maand
      */
@@ -91,29 +94,5 @@ public class Datum implements Serializable, Comparable<Datum>{
         else
             return Integer.parseInt(this.toString())> Integer.parseInt(d.toString()) ? 1 :-1 ; 
     }
-    
-    public void bewaarDatums ( Collection<Datum> datums, String naamBestand) throws BewaarException {
         
-        try {
-            if (datums.isEmpty() || naamBestand.isEmpty() || naamBestand.equals("")) {
-                if(datums.isEmpty()) throw new BewaarException("De lijst geen gegevens"); 
-                if(!naamBestand.isEmpty() || !naamBestand.equals("")) throw new BewaarException("De naam van het bestand is leeg"); 
-            }   
-            else{   
-               outputBuffer = new ObjectOutputStream(new FileOutputStream(new File(naamBestand)));
-               for(Datum d:datums){
-                   outputBuffer.writeObject(d);
-               }
-            }
-        }
-        catch(FileNotFoundException ex ){System.err.println(ex.getMessage());}
-        catch(IOException ex){System.err.println(ex.getMessage());}
-        catch(BewaarException ex) {System.err.println(ex.getMessage());}
-        
-        finally{
-            try{if(outputBuffer!=null) outputBuffer=null;}
-            catch(Exception ex){System.err.println(ex.getMessage());}
-        }
-    }
-    
 }

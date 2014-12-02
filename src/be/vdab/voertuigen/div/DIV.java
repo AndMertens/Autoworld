@@ -23,7 +23,7 @@ public class DIV {
        return instance;
     }
     
-    public Nummerplaat geefNummerplaat(){
+    public Nummerplaat getNummerplaat(){
         return (genereerNummerPlaat()); 
     }
     
