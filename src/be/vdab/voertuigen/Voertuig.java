@@ -210,7 +210,7 @@ public abstract class Voertuig implements Serializable,Comparable<Voertuig>{
     }
     
     @Override public int hashCode(){
-        return this.toString().hashCode();
+        return this.getNummerplaat().toString().hashCode();
     }
     
     @Override public int compareTo(Voertuig v){

@@ -5,7 +5,6 @@ package be.vdab.voertuigen.main;
 
 import be.vdab.util.Datum;
 import be.vdab.util.mens.*;
-import be.vdab.util.mens.Rijbewijs.*;
 import java.util.Set;
 import java.util.TreeSet;
 import be.vdab.voertuigen.*;
@@ -18,10 +17,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Arrays;
-import static java.util.Arrays.asList;
-import java.util.Iterator;
-import java.util.Map;
+
 
 
 /**
@@ -47,6 +43,7 @@ public class Main {
         Set<Voertuig> Voertuigen1 = new TreeSet<Voertuig>();
         Set<Voertuig> Voertuigen2 = new TreeSet<Voertuig>(Voertuig.getAankoopprijsComparator());
         Set<Voertuig> Voertuigen3 = new TreeSet<Voertuig>(Voertuig.getMerkComparator());
+        Set<Voertuig> Voertuigen4 = new TreeSet<Voertuig>();
         genereerVoertuigen(Voertuigen1);
         System.out.println("Lijst van voertuigen in natuurlijke orde");
         System.out.println("----------------------------------------");
@@ -65,8 +62,8 @@ public class Main {
         System.out.println();
         System.out.println("Lijst van voertuigen in bestand wagenpark.ser (natuurlijke orde)");
         System.out.println("----------------------------------------------------------------");
-        Set<Voertuig> lijst = leesVanBestandVoertuigen();
-        drukLijstVoertuigen(lijst);
+        Voertuigen4 = leesVanBestandVoertuigen();
+        drukLijstVoertuigen(Voertuigen4);
         System.out.println();
         
     }
